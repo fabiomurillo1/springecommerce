@@ -1,4 +1,6 @@
+*.dll
+*.pdb
+*.exe
 .vs/
 bin/
 obj/
-obj/AssemblyInfoInputs.cache
