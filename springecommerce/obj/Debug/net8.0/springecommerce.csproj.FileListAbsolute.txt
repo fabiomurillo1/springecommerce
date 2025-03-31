@@ -12,3 +12,4 @@ C:\Users\fabio\source\repos\springecommerce\springecommerce\obj\Debug\net8.0\ref
 C:\Users\fabio\source\repos\springecommerce\springecommerce\obj\Debug\net8.0\springecommerce.pdb
 C:\Users\fabio\source\repos\springecommerce\springecommerce\obj\Debug\net8.0\springecommerce.genruntimeconfig.cache
 C:\Users\fabio\source\repos\springecommerce\springecommerce\obj\Debug\net8.0\ref\springecommerce.dll
+C:\Users\fabio\source\repos\springecommerce\springecommerce\obj\Debug\net8.0\springecommerce.sourcelink.json
