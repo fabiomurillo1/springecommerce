@@ -1,11 +1,30 @@
 {
   "version": 3,
   "targets": {
-    "net8.0": {}
+    "net8.0": {
+      "ecommercelibrary/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "compile": {
+          "bin/placeholder/ecommercelibrary.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ecommercelibrary.dll": {}
+        }
+      }
+    }
   },
-  "libraries": {},
+  "libraries": {
+    "ecommercelibrary/1.0.0": {
+      "type": "project",
+      "path": "../ecommercelibrary/ecommercelibrary.csproj",
+      "msbuildProject": "../ecommercelibrary/ecommercelibrary.csproj"
+    }
+  },
   "projectFileDependencyGroups": {
-    "net8.0": []
+    "net8.0": [
+      "ecommercelibrary >= 1.0.0"
+    ]
   },
   "packageFolders": {
     "C:\\Users\\fabio\\.nuget\\packages\\": {},
@@ -39,7 +58,11 @@
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Users\\fabio\\source\\repos\\springecommerce\\ecommercelibrary\\ecommercelibrary.csproj": {
+              "projectPath": "C:\\Users\\fabio\\source\\repos\\springecommerce\\ecommercelibrary\\ecommercelibrary.csproj"
+            }
+          }
         }
       },
       "warningProperties": {

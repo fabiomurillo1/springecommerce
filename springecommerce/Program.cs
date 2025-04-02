@@ -1,4 +1,5 @@
-﻿using springecommerce.models;
+﻿using ecommercelibrary.services;
+using springecommerce.models;
 
 namespace springecommerce
 {
@@ -15,7 +16,7 @@ namespace springecommerce
             Console.WriteLine("D. Delete Inventory Item");
             Console.WriteLine("Q. Quit");
 
-            List<Product?> list = new List<Product?>();
+            List<Product?> list = productserviceproxy.Current.Products;
 
             char choice;
             do
@@ -28,7 +29,7 @@ namespace springecommerce
                     case 'C':
                         list.Add(new Product{ 
 
-                            Id = lastKey++,
+                            Id = ++lastKey,
                             Name = Console.ReadLine() 
                         });
                         break;

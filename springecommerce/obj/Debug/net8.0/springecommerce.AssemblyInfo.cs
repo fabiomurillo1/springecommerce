@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("springecommerce")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3c49eabd1a587c6ce637f89cf755eb38d7fa6d98")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+25d239afe19a68d6dde90d353d1b0a1d6e8c271f")]
 [assembly: System.Reflection.AssemblyProductAttribute("springecommerce")]
 [assembly: System.Reflection.AssemblyTitleAttribute("springecommerce")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
