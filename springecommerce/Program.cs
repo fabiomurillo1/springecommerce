@@ -8,7 +8,7 @@ namespace springecommerce
         
         static void Main(string[] args)
         {
-            var lastKey = 0;
+           
             Console.WriteLine("Welcome to Amazon!");
             Console.WriteLine("C. Create Item");
             Console.WriteLine("R. Read inventory items");
@@ -27,10 +27,9 @@ namespace springecommerce
                 {
 
                     case 'C':
-                        list.Add(new Product{ 
-
-                            Id = ++lastKey,
-                            Name = Console.ReadLine() 
+                        productserviceproxy.Current.AddOrUpdate(new Product
+                        {
+                            Name = Console.ReadLine()
                         });
                         break;
                     case 'R':
@@ -43,13 +42,13 @@ namespace springecommerce
                         if(selectedProduct != null)
                         {
                             selectedProduct.Name = Console.ReadLine() ?? "Error";
+                            productserviceproxy.Current.AddOrUpdate(selectedProduct);
                         } 
                         break;
                     case 'D':
                         Console.WriteLine("Which product whould you like to delete?");
                         selection = int.Parse(Console.ReadLine() ?? "-1");
-                        selectedProduct = list.FirstOrDefault(p => p.Id == selection);
-                        list.Remove(selectedProduct);
+                        productserviceproxy.Current.Delete(selection);
                         break;
                     case 'Q':
                         break;
