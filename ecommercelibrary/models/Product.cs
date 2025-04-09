@@ -11,17 +11,24 @@ namespace springecommerce.models
         public int Id { get; set; } 
         public string? Name { get; set; }
 
-        public string? Display
+        public decimal? Price { get; set; }
+
+        public int? Quantity { get; set; }
+
+        public string Display
         {
             get
             {
-                return $"{Id}. {Name}" ;
+                return $"{Id}. {Name} -- ${Price} -- {Quantity} units";
             }
         }
-        
+
+
         public Product() { 
         
             Name = string.Empty;
+            Price = 0;
+            Quantity = 0;
         
         }
          public override string ToString()
