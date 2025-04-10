@@ -19,7 +19,7 @@ namespace springecommerce.models
         {
             get
             {
-                return $"{Id}. {Name} -- ${Price} -- {Quantity} units";
+                return $"{Id}. {Name}";
             }
         }
 

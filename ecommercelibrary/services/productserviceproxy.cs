@@ -14,9 +14,9 @@ namespace ecommercelibrary.services
         {
             Products = new List<Product?>
             {
-                new Product{Id = 1, Name ="Product 1", Quantity = 1, Price = 0},
-                new Product{Id = 2, Name ="Product 2", Quantity = 1, Price = 0},
-                new Product{Id = 3, Name ="Product 3", Quantity = 1, Price = 0}
+                new Product{Id = 1, Name ="Product 1"},
+                new Product{Id = 2, Name ="Product 2"},
+                new Product{Id = 3, Name ="Product 3"}
 
             };
             Cart = new List<Product?>(); 
@@ -77,6 +77,10 @@ namespace ecommercelibrary.services
             return product;
         }
 
+        public Product? GetById(int id)
+        {
+            return Products.FirstOrDefault(p => p.Id == id);
+        }
         public Product? DeleteFromCart(int id, int amount)
         {
             if (id == 0 || amount <= 0) return null;

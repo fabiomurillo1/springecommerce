@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using ecommercelibrary.services;
 using MAUIecommerce.ViewModels;
 
@@ -10,7 +11,7 @@ public partial class InventoryManagementView : ContentPage
 		InitializeComponent();
 		BindingContext = new InventoryManagementViewModel();
 	}
-    private void DeleteClicked(object sender, EventArgs e)
+    private void DeleteClicked(object sender, EventArgs e) 
     {
         (BindingContext as InventoryManagementViewModel)?.Delete();
     }
@@ -22,5 +23,16 @@ public partial class InventoryManagementView : ContentPage
     private void AddClicked(object sender, EventArgs e)
     {
         Shell.Current.GoToAsync("//Product");
+    } 
+
+    private void ContentPage_NavigatedTo(object sender, NavigatedToEventArgs e)
+    {
+        (BindingContext as InventoryManagementViewModel)?.RefreshProductList();
+    }
+
+    private void EditClicked(object sender, EventArgs e)
+    {
+        var productId = (BindingContext as InventoryManagementViewModel)?.SelectedProduct?.Id;
+        Shell.Current.GoToAsync($"//Product?productId={productId}");
     }
 }

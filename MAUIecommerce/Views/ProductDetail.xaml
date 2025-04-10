@@ -2,7 +2,9 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MAUIecommerce.Views.ProductDetail"
-             Title="ProductDetail">
+             Title="ProductDetail"
+             NavigatedTo="ContentPage_NavigatedTo"
+             >
     <VerticalStackLayout>
         <Label 
             Text="Name: "
@@ -10,10 +12,6 @@
             HorizontalOptions="Center" />
         <Entry
             Text="{Binding Name}"
-            />
-        <Entry Text="{Binding Price}"
-            />
-        <Entry Text="{Binding Quantity}"
             />
         <Button Text="Ok" Clicked="OkClicked" />
         <Button Text="Go Back" Clicked="GoBackClicked"/>
