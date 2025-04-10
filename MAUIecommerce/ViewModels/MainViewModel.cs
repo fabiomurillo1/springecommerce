@@ -6,7 +6,15 @@ using System.Threading.Tasks;
 
 namespace MAUIecommerce.ViewModels
 {
-    internal class MainViewModel
+    public class MainViewModel
     {
+        public string Display
+        {
+            get
+            {
+                return "Hello World!";
+            }
+        }
+
     }
 }
