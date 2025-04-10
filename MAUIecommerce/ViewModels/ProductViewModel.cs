@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MAUIecommerce.ViewModels
 {
-    internal class ProductViewModel
+    public class ProductViewModel
     {
     }
 }
