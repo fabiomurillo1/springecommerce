@@ -20,8 +20,8 @@ namespace springecommerce
             Console.WriteLine("8. Checkout");
             Console.WriteLine("9. Quit");
 
-            List<Product?> list = productserviceproxy.Current.Products;
-            List<Product?> shoppingcart = productserviceproxy.Current.Cart;
+            List<Product?>list = productserviceproxy.Current.Products;
+            List<Product?>shoppingcart = productserviceproxy.Current.Cart;
 
             char choice;
             do

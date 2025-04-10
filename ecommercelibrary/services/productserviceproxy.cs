@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,7 +19,7 @@ namespace ecommercelibrary.services
                 new Product{Id = 3, Name ="Product 3", Quantity = 1, Price = 0}
 
             };
-            Cart = new List<Product>(); 
+            Cart = new List<Product?>(); 
         }
         private int LastKey
         {
