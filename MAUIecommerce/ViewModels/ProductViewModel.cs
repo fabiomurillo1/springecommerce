@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ecommercelibrary.services;
 using springecommerce.models;
 
 namespace MAUIecommerce.ViewModels
@@ -28,6 +29,10 @@ namespace MAUIecommerce.ViewModels
 
         public Product? Model { get; set; }
 
+        public void AddOrUpdate()
+        {
+            productserviceproxy.Current.AddOrUpdate(Model);
+        }
         public ProductViewModel()
         {
             Model = new Product();
