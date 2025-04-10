@@ -10,14 +10,17 @@ public partial class InventoryManagementView : ContentPage
 		InitializeComponent();
 		BindingContext = new InventoryManagementViewModel();
 	}
-
+    private void DeleteClicked(object sender, EventArgs e)
+    {
+        (BindingContext as InventoryManagementViewModel)?.Delete();
+    }
     private void CancelClicked(object sender, EventArgs e)
     {
 		Shell.Current.GoToAsync("//MainPage");
     }
 
-    private void DeleteClicked(object sender, EventArgs e)
+    private void AddClicked(object sender, EventArgs e)
     {
-        (BindingContext as InventoryManagementViewModel)?.Delete();  
+        Shell.Current.GoToAsync("//Product");
     }
 }

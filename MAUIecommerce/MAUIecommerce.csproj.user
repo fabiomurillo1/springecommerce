@@ -9,6 +9,9 @@
     <MauiXaml Update="Views\InventoryManagementView.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
+    <MauiXaml Update="Views\ProductDetail.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
     <MauiXaml Update="Views\ShopView.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
