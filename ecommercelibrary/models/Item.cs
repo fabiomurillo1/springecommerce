@@ -31,6 +31,14 @@ namespace ecommercelibrary.models
         public Item() 
         {
             Product = new Product();
+            Quantity = 0;
+        }
+
+        public Item(Item i)
+        {
+            Product = new Product(i.Product);
+            Quantity = i.Quantity;
+            Id = i.Id;
         }
     }
 }

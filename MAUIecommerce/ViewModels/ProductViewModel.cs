@@ -10,7 +10,8 @@ using springecommerce.models;
 namespace MAUIecommerce.ViewModels
 {
     public class ProductViewModel
-    {
+    {   
+        private Item? cachedModel{ get; set;}
         public string? Name 
         {
             get
@@ -47,14 +48,24 @@ namespace MAUIecommerce.ViewModels
         {
             productserviceproxy.Current.AddOrUpdate(Model);
         }
+
+        public void Undo()
+        {
+            productserviceproxy.Current.AddOrUpdate(cachedModel);
+        }
         public ProductViewModel()
         {
             Model = new Item();
+            cachedModel = null;
         }
 
         public ProductViewModel(Item? model)
         {
-            Model = model;  
+            Model = model;
+            if(model != null)
+            {
+                cachedModel = new Item(model);
+            }
         }
 
 

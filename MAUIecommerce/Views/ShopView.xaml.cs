@@ -17,6 +17,6 @@ public partial class ShopView : ContentPage
 
     private void AddToCartClicked(object sender, EventArgs e)
     {
-
+        (BindingContext as ShopViewModel).PurchaseItem();
     }
 }

@@ -27,6 +27,12 @@ namespace springecommerce.models
           
         
         }
+
+        public Product(Product p)
+        {
+            Name = p.Name;
+            Id = p.Id;
+        }
          public override string ToString()
         {
 
