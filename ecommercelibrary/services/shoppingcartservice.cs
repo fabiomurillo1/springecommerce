@@ -3,14 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ecommercelibrary.models;
 using springecommerce.models;
 
 namespace ecommercelibrary.services
 {
     public class shoppingcartservice
     {
-        private List<Product> items;
-        private List<Product> CartItems
+        private productserviceproxy _prodSvc;
+        private List<Item> items;
+        private List<Item> CartItems
         {
             get
             {
@@ -34,7 +36,7 @@ namespace ecommercelibrary.services
         private static shoppingcartservice? instance;
         private shoppingcartservice() 
         {
-            items = new List<Product>();
+            items = new List<Item>();
         }
     }
 }
