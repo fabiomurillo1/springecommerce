@@ -11,9 +11,6 @@ namespace springecommerce.models
         public int Id { get; set; } 
         public string? Name { get; set; }
 
-        public decimal? Price { get; set; }
-
-        public int? Quantity { get; set; }
 
         public string Display
         {
@@ -27,8 +24,7 @@ namespace springecommerce.models
         public Product() { 
         
             Name = string.Empty;
-            Price = 0;
-            Quantity = 0;
+          
         
         }
          public override string ToString()

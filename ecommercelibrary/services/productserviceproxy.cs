@@ -4,6 +4,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
+using ecommercelibrary.models;
 using springecommerce.models;
 
 namespace ecommercelibrary.services
@@ -12,11 +14,11 @@ namespace ecommercelibrary.services
     {
         private productserviceproxy() 
         {
-            Products = new List<Product?>
+            Products = new List<Item?>
             {
-                new Product{Id = 1, Name ="Product 1"},
-                new Product{Id = 2, Name ="Product 2"},
-                new Product{Id = 3, Name ="Product 3"}
+                new Item {Product = new Product{Id = 1, Name ="Product 1"}, Id = 1, Quantity = 1},
+                new Item {Product = new Product{Id = 2, Name ="Product 2"}, Id = 2, Quantity = 2 },
+                new Item {Product = new Product{Id = 3, Name ="Product 3"},  Id = 3, Quantity = 3 }
 
             };
             Cart = new List<Product?>(); 
@@ -49,121 +51,125 @@ namespace ecommercelibrary.services
             }
         }
         
-        public List<Product?> Products { get; private set; }
+        public List<Item?> Products { get; private set; }
         public List<Product?> Cart { get; private set; }
 
 
-        public Product AddOrUpdate(Product product) 
+        public Item AddOrUpdate(Item item) 
         {
-            if(product.Id == 0)
+            if(item.Id == 0)
             {
-                product.Id = LastKey + 1;
-                Products.Add(product);
+                item.Id = LastKey + 1;
+                item.Product.Id = item.Id;
+                Products.Add(item);
             }
             
 
-            return product;
+            return item;
         }
         
-        public Product? Delete(int id)
+        public Item? Delete(int id)
         {
             if(id == 0)
             {
                 return null; 
             }
 
-            Product? product = Products.FirstOrDefault(p => p.Id == id); 
+            Item? product = Products.FirstOrDefault(p => p.Id == id); 
             Products.Remove(product);
             return product;
         }
 
-        public Product? GetById(int id)
+        public Item? GetById(int id)
         {
             return Products.FirstOrDefault(p => p.Id == id);
         }
-        public Product? DeleteFromCart(int id, int amount)
-        {
-            if (id == 0 || amount <= 0) return null;
-            Product? cartItem = Cart.FirstOrDefault(p => p.Id == id);
-            if (cartItem == null || cartItem.Quantity < amount) return null;
-            Product? inventoryItem = Products.FirstOrDefault(p => p.Id == id);
-            if (inventoryItem != null)
-            {
-                inventoryItem.Quantity += amount;
-            }
-            cartItem.Quantity -= amount;
-            if (cartItem.Quantity == 0)
-            {
-                Cart.Remove(cartItem);
-            }
-
-            return cartItem;
-        }
 
 
-        public Product? AddToCart(int id, int amount)
-        {
-            var product = Products.FirstOrDefault(p => p?.Id == id);
 
-            if (product == null || amount <= 0 || product.Quantity < amount)
-            {
-                return null;
-            }
+        //public Item? DeleteFromCart(int id, int amount)
+        //{
+           // if (id == 0 || amount <= 0) return null;
+            //Item? cartItem = Cart.FirstOrDefault(p => p.Id == id);
+            //if (cartItem == null || cartItem.Quantity < amount) return null;
+           // Item? inventoryItem = Products.FirstOrDefault(p => p.Id == id);
+           // if (inventoryItem != null)
+           // {
+           //     inventoryItem.Quantity += amount;
+           // }
+           // cartItem.Quantity -= amount;
+           // if (cartItem.Quantity == 0)
+            //{
+              //  Cart.Remove(cartItem);
+           // }
 
-            product.Quantity -= amount;
-            var cartItem = Cart.FirstOrDefault(p => p?.Id == id);
-            if (cartItem != null)
-            {
-                cartItem.Quantity += amount;
-                return cartItem;
-            }
-            var newCartItem = new Product
-            {
-                Id = product.Id,
-                Name = product.Name,
-                Price = product.Price,
-                Quantity = amount
-            };
-            Cart.Add(newCartItem);
-            return newCartItem;
-        }
+           // return cartItem;
+       // }
 
-        public string Checkout()
-        {
-            if (!Cart.Any())
-            {
-                return "Your shopping cart is empty. Nothing to checkout.";
-            }
 
-            StringBuilder receipt = new StringBuilder();
-            receipt.AppendLine("===== Receipt =====");
-            decimal subtotal = 0;
+        //public Product? AddToCart(int id, int amount)
+        //{
+        //    var product = Products.FirstOrDefault(p => p?.Id == id);
 
-            foreach (var item in Cart)
-            {
-                if (item != null)
-                {
-                    decimal lineTotal = (item.Price ?? 0) * (item.Quantity ?? 0);
-                    subtotal += lineTotal;
-                    receipt.AppendLine($"{item.Name} x {item.Quantity} @ ${item.Price:F2} = ${lineTotal:F2}");
-                }
-            }
+       //     if (product == null || amount <= 0 || product.Quantity < amount)
+        //    {
+      //          return null;
+      //      }
 
-            decimal tax = subtotal * 0.07m;
-            decimal total = subtotal + tax;
+       //     product.Quantity -= amount;
+       //     var cartItem = Cart.FirstOrDefault(p => p?.Id == id);
+       //     if (cartItem != null)
+         //   {
+        //        cartItem.Quantity += amount;
+        //        return cartItem;
+         //   }
+         //   var newCartItem = new Product
+         //   {
+        //        Id = product.Id,
+         //       Name = product.Name,
+         //       Price = product.Price,
+         //       Quantity = amount
+        //    };
+        //Cart.Add(newCartItem);
+       //     return newCartItem;
+       // }
 
-            receipt.AppendLine("--------------------");
-            receipt.AppendLine($"Subtotal: ${subtotal:F2}");
-            receipt.AppendLine($"Sales Tax (7%): ${tax:F2}");
-            receipt.AppendLine($"Total: ${total:F2}");
-            receipt.AppendLine("====================");
+        //public string Checkout()
+        //{ 
+          //  if (!Cart.Any())
+            //{
+              //  return "Your shopping cart is empty. Nothing to checkout.";
+            //}
 
-            Cart.Clear(); 
+            //StringBuilder receipt = new StringBuilder();
+            //receipt.AppendLine("===== Receipt =====");
+            //decimal subtotal = 0;
 
-            return receipt.ToString();
+            //foreach (var item in Cart)
+            //{
+              //  if (item != null)
+                //{
+                  //  decimal lineTotal = (item.Price ?? 0) * (item.Quantity ?? 0);
+                    //subtotal += lineTotal;
+                    //receipt.AppendLine($"{item.Name} x {item.Quantity} @ ${item.Price:F2} = ${lineTotal:F2}");
+                //}
+           // }
+
+            //decimal tax = subtotal * 0.07m;
+            //decimal total = subtotal + tax;
+
+            //receipt.AppendLine("--------------------");
+            //receipt.AppendLine($"Subtotal: ${subtotal:F2}");
+            //receipt.AppendLine($"Sales Tax (7%): ${tax:F2}");
+            //receipt.AppendLine($"Total: ${total:F2}");
+            //receipt.AppendLine("====================");
+
+            //Cart.Clear(); 
+
+            //return receipt.ToString();
         }
 
     }
 
 
-}
+
