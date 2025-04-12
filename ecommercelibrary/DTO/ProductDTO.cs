@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ecommercelibrary.DTO;
+using springecommerce.models;
 
-namespace springecommerce.models
+namespace ecommercelibrary.DTO
 {
-    public class Product
+    public class ProductDTO
     {
-        public int Id { get; set; } 
+        public int Id { get; set; }
         public string? Name { get; set; }
 
 
@@ -21,30 +21,26 @@ namespace springecommerce.models
             }
         }
 
-
-        public Product() { 
-        
-            Name = string.Empty;
-        }
-
-        public Product(Product p)
+        public ProductDTO(Product p)
         {
             Name = p.Name;
             Id = p.Id;
         }
-         public override string ToString()
+        public ProductDTO()
+        {
+
+            Name = string.Empty;
+        }
+
+        public ProductDTO(ProductDTO p)
+        {
+            Name = p.Name;
+            Id = p.Id;
+        }
+        public override string ToString()
         {
 
             return Display ?? string.Empty;
         }
-
-        public Product(ProductDTO p)
-        {
-            Name = p.Name;
-            Id= p.Id;   
-        }
-
-    } 
-    
-
+    }
 }

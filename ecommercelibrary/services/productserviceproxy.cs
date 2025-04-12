@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using ecommercelibrary.DTO;
 using ecommercelibrary.models;
 using springecommerce.models;
 
@@ -16,9 +17,9 @@ namespace ecommercelibrary.services
         {
             Products = new List<Item?>
             {
-                new Item {Product = new Product{Id = 1, Name ="Product 1"}, Id = 1, Quantity = 1},
-                new Item {Product = new Product{Id = 2, Name ="Product 2"}, Id = 2, Quantity = 2 },
-                new Item {Product = new Product{Id = 3, Name ="Product 3"},  Id = 3, Quantity = 3 }
+                new Item {Product = new ProductDTO{Id = 1, Name ="Product 1"}, Id = 1, Quantity = 1},
+                new Item {Product = new ProductDTO{Id = 2, Name ="Product 2"}, Id = 2, Quantity = 2 },
+                new Item {Product = new ProductDTO{Id = 3, Name ="Product 3"},  Id = 3, Quantity = 3 }
 
             };
             Cart = new List<Product?>(); 
@@ -74,6 +75,22 @@ namespace ecommercelibrary.services
             
 
             return item;
+        }
+
+        public Item? PurchaseItem(Item? item) 
+        {
+            if (item.Id <= 0 || item == null) 
+            {
+                return null;
+            }
+
+            var itemtopurchase = GetById(item.Id);
+            if (itemtopurchase != null)
+            {
+                itemtopurchase.Quantity--;
+            }
+
+            return itemtopurchase;
         }
         
         public Item? Delete(int id)

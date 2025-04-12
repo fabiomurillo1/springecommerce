@@ -79,8 +79,18 @@ namespace ecommercelibrary.services
             if (itemtoreturn != null)
             {
                 itemtoreturn.Quantity--;
+                var inventoryitem = _prodSvc.Products.FirstOrDefault(p => p.Id == itemtoreturn.Id);
+                if(inventoryitem == null)
+                {
+                    _prodSvc.AddOrUpdate(new Item(itemtoreturn));
+                }
+                else
+                {
+                    inventoryitem.Quantity++;
+                }
             }
 
+            
             return itemtoreturn;
         }
     }

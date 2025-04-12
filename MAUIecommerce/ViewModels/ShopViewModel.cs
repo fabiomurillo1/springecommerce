@@ -65,7 +65,7 @@ namespace MAUIecommerce.ViewModels
             if (SelectedCartItem != null)
             {
                 var shouldrefresh = SelectedCartItem.Quantity >= 1;
-                var updateditem = _invSvc.AddOrUpdate(SelectedCartItem);
+                var updateditem = _cartSvc.ReturnItem(SelectedCartItem);
 
                 if (updateditem != null && shouldrefresh)
                 {
