@@ -19,4 +19,9 @@ public partial class ShopView : ContentPage
     {
         (BindingContext as ShopViewModel).PurchaseItem();
     }
+
+    private void RemoveFromCartClicked(object sender, EventArgs e)
+    {
+        (BindingContext as ShopViewModel).ReturnItem();
+    }
 }

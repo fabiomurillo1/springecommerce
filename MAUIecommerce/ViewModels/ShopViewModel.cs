@@ -16,12 +16,20 @@ namespace MAUIecommerce.ViewModels
         private productserviceproxy _invSvc = productserviceproxy.Current;
         private shoppingcartservice _cartSvc = shoppingcartservice.Current; 
         public Item? SelectedItem { get; set; } 
-
+        public Item? SelectedCartItem { get; set; }
         public ObservableCollection<Item?> Inventory
         {
             get
             {
-                return new ObservableCollection<Item?>(_invSvc.Products);
+                return new ObservableCollection<Item?>(_invSvc.Products.Where(i => i?.Quantity > 0));
+            }
+        }
+
+        public ObservableCollection<Item?> ShoppingCart
+        {
+            get
+            {
+                return new ObservableCollection<Item?>(_cartSvc.CartItems.Where(i => i?.Quantity > 0));
             }
         }
 
@@ -40,10 +48,34 @@ namespace MAUIecommerce.ViewModels
         {
             if (SelectedItem != null)
             {
-                _cartSvc.AddOrUpdate(SelectedItem);
-                NotifyPropertyChanged(nameof(Inventory));    
+                var shouldrefresh = SelectedItem.Quantity >= 1; 
+                var updateditem =_cartSvc.AddOrUpdate(SelectedItem);
+
+                if (updateditem != null && shouldrefresh)
+                {
+                    NotifyPropertyChanged(nameof(Inventory));
+                    NotifyPropertyChanged(nameof(ShoppingCart));
+
+                }
             }
             
         }
+        public void ReturnItem()
+        {
+            if (SelectedCartItem != null)
+            {
+                var shouldrefresh = SelectedCartItem.Quantity >= 1;
+                var updateditem = _invSvc.AddOrUpdate(SelectedCartItem);
+
+                if (updateditem != null && shouldrefresh)
+                {
+                    NotifyPropertyChanged(nameof(Inventory));
+                    NotifyPropertyChanged(nameof(ShoppingCart));
+
+                }
+            }
+
+        }
     }
 }
+

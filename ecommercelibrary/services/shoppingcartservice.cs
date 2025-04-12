@@ -39,12 +39,12 @@ namespace ecommercelibrary.services
             items = new List<Item>();
         }
 
-        public void AddOrUpdate(Item item)
+        public Item? AddOrUpdate(Item item) 
         {
             var existinginvitem = _prodSvc.GetById(item.Id);
             if (existinginvitem == null || existinginvitem.Quantity == 0)
             {
-                return;
+                return null;
             }
             if (existinginvitem != null)
             {
@@ -64,7 +64,24 @@ namespace ecommercelibrary.services
             {
                 existingitem.Quantity++;
             }
-                      
+
+            return existinginvitem;
+        }
+
+        public Item? ReturnItem(Item? item)
+        {
+            if (item.Id <= 0 || item == null)
+            {
+                return null;
+            }
+
+            var itemtoreturn = CartItems.FirstOrDefault(c => c.Id == item.Id);
+            if (itemtoreturn != null)
+            {
+                itemtoreturn.Quantity--;
+            }
+
+            return itemtoreturn;
         }
     }
 }
