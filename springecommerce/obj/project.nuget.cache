@@ -1,8 +1,30 @@
 {
   "version": 2,
-  "dgSpecHash": "J7KtsCygJeU=",
+  "dgSpecHash": "FuwJqJx5DCw=",
   "success": true,
   "projectFilePath": "C:\\Users\\fabio\\source\\repos\\springecommerce\\springecommerce\\springecommerce.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\fabio\\.nuget\\packages\\microsoft.extensions.configuration\\9.0.0\\microsoft.extensions.configuration.9.0.0.nupkg.sha512",
+    "C:\\Users\\fabio\\.nuget\\packages\\microsoft.extensions.configuration.abstractions\\9.0.0\\microsoft.extensions.configuration.abstractions.9.0.0.nupkg.sha512",
+    "C:\\Users\\fabio\\.nuget\\packages\\microsoft.extensions.dependencyinjection\\9.0.0\\microsoft.extensions.dependencyinjection.9.0.0.nupkg.sha512",
+    "C:\\Users\\fabio\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\9.0.0\\microsoft.extensions.dependencyinjection.abstractions.9.0.0.nupkg.sha512",
+    "C:\\Users\\fabio\\.nuget\\packages\\microsoft.extensions.logging\\9.0.0\\microsoft.extensions.logging.9.0.0.nupkg.sha512",
+    "C:\\Users\\fabio\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\9.0.0\\microsoft.extensions.logging.abstractions.9.0.0.nupkg.sha512",
+    "C:\\Users\\fabio\\.nuget\\packages\\microsoft.extensions.options\\9.0.0\\microsoft.extensions.options.9.0.0.nupkg.sha512",
+    "C:\\Users\\fabio\\.nuget\\packages\\microsoft.extensions.primitives\\9.0.0\\microsoft.extensions.primitives.9.0.0.nupkg.sha512",
+    "C:\\Users\\fabio\\.nuget\\packages\\microsoft.maui.controls\\9.0.60\\microsoft.maui.controls.9.0.60.nupkg.sha512",
+    "C:\\Users\\fabio\\.nuget\\packages\\microsoft.maui.controls.build.tasks\\9.0.60\\microsoft.maui.controls.build.tasks.9.0.60.nupkg.sha512",
+    "C:\\Users\\fabio\\.nuget\\packages\\microsoft.maui.controls.core\\9.0.60\\microsoft.maui.controls.core.9.0.60.nupkg.sha512",
+    "C:\\Users\\fabio\\.nuget\\packages\\microsoft.maui.controls.xaml\\9.0.60\\microsoft.maui.controls.xaml.9.0.60.nupkg.sha512",
+    "C:\\Users\\fabio\\.nuget\\packages\\microsoft.maui.core\\9.0.60\\microsoft.maui.core.9.0.60.nupkg.sha512",
+    "C:\\Users\\fabio\\.nuget\\packages\\microsoft.maui.essentials\\9.0.60\\microsoft.maui.essentials.9.0.60.nupkg.sha512",
+    "C:\\Users\\fabio\\.nuget\\packages\\microsoft.maui.graphics\\9.0.60\\microsoft.maui.graphics.9.0.60.nupkg.sha512",
+    "C:\\Users\\fabio\\.nuget\\packages\\microsoft.maui.resizetizer\\9.0.60\\microsoft.maui.resizetizer.9.0.60.nupkg.sha512",
+    "C:\\Users\\fabio\\.nuget\\packages\\system.diagnostics.diagnosticsource\\9.0.0\\system.diagnostics.diagnosticsource.9.0.0.nupkg.sha512",
+    "C:\\Users\\fabio\\.nuget\\packages\\system.io.pipelines\\9.0.0\\system.io.pipelines.9.0.0.nupkg.sha512",
+    "C:\\Users\\fabio\\.nuget\\packages\\system.numerics.vectors\\4.5.0\\system.numerics.vectors.4.5.0.nupkg.sha512",
+    "C:\\Users\\fabio\\.nuget\\packages\\system.text.encodings.web\\9.0.0\\system.text.encodings.web.9.0.0.nupkg.sha512",
+    "C:\\Users\\fabio\\.nuget\\packages\\system.text.json\\9.0.0\\system.text.json.9.0.0.nupkg.sha512"
+  ],
   "logs": []
 }

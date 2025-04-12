@@ -34,7 +34,7 @@
                                 <Label Grid.Column="1" Text="{Binding Product.Name}"/>
                                 <Label Grid.Column="2" Text="x"/>
                                 <Label Grid.Column="3" Text="{Binding Quantity}"/>
-                                <Button Grid.Column="4" Text="+" Command="{Binding}"/>
+                                <Button Grid.Column="4" Text="+" Command="{Binding AddCommand}" Clicked="InLineAddClicked"/>
                             </Grid>
                         </ViewCell>
                     </DataTemplate>

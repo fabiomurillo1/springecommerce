@@ -24,4 +24,9 @@ public partial class ShopView : ContentPage
     {
         (BindingContext as ShopViewModel).ReturnItem();
     }
+
+    private void InLineAddClicked(object sender, EventArgs e)
+    {
+        (BindingContext as ShopViewModel).RefreshUX();
+    }
 }
