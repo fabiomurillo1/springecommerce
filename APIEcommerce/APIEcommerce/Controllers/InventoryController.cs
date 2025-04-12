@@ -26,7 +26,13 @@ namespace APIEcommerce.Controllers
                 new Item {Product = new ProductDTO{Id = 3, Name ="Product 3"},  Id = 3, Quantity = 3 }
 
             };
-            
+            //return new List<Product>
+            //{
+            //    new Product{ Id = 1, Name = "Something 1"},
+            //    new Product{ Id = 2, Name = "Something 2"},
+            //    new Product{ Id = 3, Name = "Something 3"}
+            //};
+
         }
     }
 }

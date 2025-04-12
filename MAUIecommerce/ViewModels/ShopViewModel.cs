@@ -15,21 +15,21 @@ namespace MAUIecommerce.ViewModels
     {
         private productserviceproxy _invSvc = productserviceproxy.Current;
         private shoppingcartservice _cartSvc = shoppingcartservice.Current; 
-        public Item? SelectedItem { get; set; } 
-        public Item? SelectedCartItem { get; set; }
-        public ObservableCollection<Item?> Inventory
+        public ItemViewModel? SelectedItem { get; set; } 
+        public ItemViewModel? SelectedCartItem { get; set; }
+        public ObservableCollection<ItemViewModel?> Inventory
         {
             get
             {
-                return new ObservableCollection<Item?>(_invSvc.Products.Where(i => i?.Quantity > 0));
+                return new ObservableCollection<ItemViewModel?>(_invSvc.Products.Where(i => i?.Quantity > 0).Select(m => new ItemViewModel(m)));
             }
         }
 
-        public ObservableCollection<Item?> ShoppingCart
+        public ObservableCollection<ItemViewModel?> ShoppingCart
         {
             get
             {
-                return new ObservableCollection<Item?>(_cartSvc.CartItems.Where(i => i?.Quantity > 0));
+                return new ObservableCollection<ItemViewModel>(_cartSvc.CartItems.Where(i => i?.Quantity > 0).Select(m => new ItemViewModel(m)));
             }
         }
 
@@ -54,8 +54,8 @@ namespace MAUIecommerce.ViewModels
         {
             if (SelectedItem != null)
             {
-                var shouldrefresh = SelectedItem.Quantity >= 1; 
-                var updateditem =_cartSvc.AddOrUpdate(SelectedItem);
+                var shouldrefresh = SelectedItem.Model.Quantity >= 1; 
+                var updateditem =_cartSvc.AddOrUpdate(SelectedItem.Model);
 
                 if (updateditem != null && shouldrefresh)
                 {
@@ -70,8 +70,8 @@ namespace MAUIecommerce.ViewModels
         {
             if (SelectedCartItem != null)
             {
-                var shouldrefresh = SelectedCartItem.Quantity >= 1;
-                var updateditem = _cartSvc.ReturnItem(SelectedCartItem);
+                var shouldrefresh = SelectedCartItem.Model.Quantity >= 1;
+                var updateditem = _cartSvc.ReturnItem(SelectedCartItem.Model);
 
                 if (updateditem != null && shouldrefresh)
                 {
