@@ -15,10 +15,8 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <ListView Grid.Row="0"
-                ItemsSource="{Binding Inventory}"
-                SelectedItem="{Binding SelectedItem}"
-             >
-
+                      ItemsSource="{Binding Inventory}"
+                      SelectedItem="{Binding SelectedItem}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
@@ -40,29 +38,42 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-            <Button Grid.Row ="1" Text="Add" Clicked="AddToCartClicked"/>
+            <Button Grid.Row="1" Text="Return to Main" Clicked="CancelClicked"/>
         </Grid>
-
 
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
-                <RowDefinition Height="10*"/>
-                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <ListView Grid.Row="0"
-                ItemsSource ="{Binding ShoppingCart}"
-                SelectedItem="{Binding SelectedCartItem}"
-                 >
+
+            <Entry Grid.Row="0" Placeholder="Search cart..." TextChanged="CartSearchChanged" />
+
+            <ListView Grid.Row="1"
+                      ItemsSource="{Binding FilteredCart}"
+                      SelectedItem="{Binding SelectedCartItem}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <Label Text="{Binding Model.Display}"/>
+                            <Label Text="{Binding Model.Display}" />
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-            <Button Grid.Row ="1" Text="Return" Clicked="RemoveFromCartClicked"/>
+
+            <Label Grid.Row="2"
+                   Text="{Binding TotalDisplay}"
+                   FontAttributes="Bold"
+                   FontSize="16"
+                   HorizontalOptions="Center"
+                   Margin="0,5" />
+
+            <HorizontalStackLayout Grid.Row="3" Spacing="20" Padding="10">
+                <Button Text="Checkout" Clicked="CheckoutClicked" />
+                <Button Text="Return" Clicked="RemoveFromCartClicked" />
+            </HorizontalStackLayout>
         </Grid>
     </Grid>
-
 </ContentPage>

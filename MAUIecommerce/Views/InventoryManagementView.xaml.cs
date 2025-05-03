@@ -23,12 +23,14 @@ public partial class InventoryManagementView : ContentPage
     private void AddClicked(object sender, EventArgs e)
     {
         Shell.Current.GoToAsync("//Product");
-    } 
+    }
 
-    private void ContentPage_NavigatedTo(object sender, NavigatedToEventArgs e)
+    private async void ContentPage_NavigatedTo(object sender, NavigatedToEventArgs e)
     {
+        await productserviceproxy.Current.Refresh();
         (BindingContext as InventoryManagementViewModel)?.RefreshProductList();
     }
+
 
     private void EditClicked(object sender, EventArgs e)
     {
@@ -38,6 +40,6 @@ public partial class InventoryManagementView : ContentPage
 
     private void SearchClicked(object sender, EventArgs e)
     {
-        (BindingContext as InventoryManagementViewModel)?.RefreshProductList();
+        (BindingContext as InventoryManagementViewModel)?.Search();
     }
 }

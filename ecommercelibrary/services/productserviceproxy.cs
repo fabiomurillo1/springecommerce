@@ -8,6 +8,7 @@ using System.Xml.Linq;
 using ecommercelibrary.DTO;
 using ecommercelibrary.models;
 using ecommercelibrary.Utilities;
+using ecommercelibrary.Utility;
 using Newtonsoft.Json;
 using springecommerce.models;
 
@@ -19,26 +20,8 @@ namespace ecommercelibrary.services
         {
             var productPayload = new WebRequestHandler().Get("/Inventory").Result;
             Products = JsonConvert.DeserializeObject<List<Item>>(productPayload) ?? new List<Item?>();
-            //Products = new List<Item?>
-            //{
-            //    new Item { Product = new ProductDTO { Id = 1, Name = "Product 1" }, Id = 1, Quantity = 1 },
-            //    new Item { Product = new ProductDTO { Id = 2, Name = "Product 2" }, Id = 2, Quantity = 2 },
-            //    new Item { Product = new ProductDTO { Id = 3, Name = "Product 3" }, Id = 3, Quantity = 3 },
-
-            //};
-            //Cart = new List<Product?>(); 
         }
-        private int LastKey
-        {
-            get
-            {
-                if(!Products.Any())
-                {
-                    return 0;
-                }
-                return Products.Select(p => p?.Id ?? 0).Max();
-            }
-        }
+        
         private static productserviceproxy? instance;
         private static object instanceLock = new object();
         public static productserviceproxy? Current
@@ -59,26 +42,43 @@ namespace ecommercelibrary.services
         public List<Item?> Products { get; private set; }
         public List<Product?> Cart { get; private set; }
 
-
+        public async Task<IEnumerable<Item?>> Search(string? query)
+        {
+            if (query == null)
+            {
+                return new List<Item>();
+            }
+            var response = await new WebRequestHandler().Post("/Inventory/Search", new QueryRequest {Query = query});
+            Products = JsonConvert.DeserializeObject<List<Item?>>(response) ?? new List<Item?>();
+            return Products;
+        }
         public Item AddOrUpdate(Item item) 
         {
-            if(item.Id == 0)
+            var response = new WebRequestHandler().Post("/Inventory", item).Result;
+            var newItem = JsonConvert.DeserializeObject<Item>(response);
+            if (newItem == null)
             {
-                item.Id = LastKey + 1;
-                item.Product.Id = item.Id;
-                Products.Add(item);
+                return item;
+            }
+            if(item.Id == 0) 
+            {
+                Products.Add(newItem);
             }
             else
             {
                 var existingitem = Products.FirstOrDefault(p => p.Id == item.Id);
                 var index  = Products.IndexOf(existingitem);
                 Products.RemoveAt(index);
-                Products.Insert(index, new Item(item));
+                Products.Insert(index, new Item(newItem));
                 
             }
-            
-
             return item;
+        }
+
+        public async Task Refresh()
+        {
+            var productPayload = await new WebRequestHandler().Get("/Inventory");
+            Products = JsonConvert.DeserializeObject<List<Item>>(productPayload) ?? new List<Item?>();
         }
 
         public Item? PurchaseItem(Item? item) 
@@ -104,9 +104,11 @@ namespace ecommercelibrary.services
                 return null; 
             }
 
+            var result = new WebRequestHandler().Delete($"/Inventory/Delete/{id}").Result;
+
             Item? product = Products.FirstOrDefault(p => p.Id == id); 
             Products.Remove(product);
-            return product;
+            return JsonConvert.DeserializeObject<Item>(result);
         }
 
         public Item? GetById(int id)
@@ -115,87 +117,6 @@ namespace ecommercelibrary.services
         }
 
 
-
-        //public Item? DeleteFromCart(int id, int amount)
-        //{
-           // if (id == 0 || amount <= 0) return null;
-            //Item? cartItem = Cart.FirstOrDefault(p => p.Id == id);
-            //if (cartItem == null || cartItem.Quantity < amount) return null;
-           // Item? inventoryItem = Products.FirstOrDefault(p => p.Id == id);
-           // if (inventoryItem != null)
-           // {
-           //     inventoryItem.Quantity += amount;
-           // }
-           // cartItem.Quantity -= amount;
-           // if (cartItem.Quantity == 0)
-            //{
-              //  Cart.Remove(cartItem);
-           // }
-
-           // return cartItem;
-       // }
-
-
-        //public Product? AddToCart(int id, int amount)
-        //{
-        //    var product = Products.FirstOrDefault(p => p?.Id == id);
-
-       //     if (product == null || amount <= 0 || product.Quantity < amount)
-        //    {
-      //          return null;
-      //      }
-
-       //     product.Quantity -= amount;
-       //     var cartItem = Cart.FirstOrDefault(p => p?.Id == id);
-       //     if (cartItem != null)
-         //   {
-        //        cartItem.Quantity += amount;
-        //        return cartItem;
-         //   }
-         //   var newCartItem = new Product
-         //   {
-        //        Id = product.Id,
-         //       Name = product.Name,
-         //       Price = product.Price,
-         //       Quantity = amount
-        //    };
-        //Cart.Add(newCartItem);
-       //     return newCartItem;
-       // }
-
-        //public string Checkout()
-        //{ 
-          //  if (!Cart.Any())
-            //{
-              //  return "Your shopping cart is empty. Nothing to checkout.";
-            //}
-
-            //StringBuilder receipt = new StringBuilder();
-            //receipt.AppendLine("===== Receipt =====");
-            //decimal subtotal = 0;
-
-            //foreach (var item in Cart)
-            //{
-              //  if (item != null)
-                //{
-                  //  decimal lineTotal = (item.Price ?? 0) * (item.Quantity ?? 0);
-                    //subtotal += lineTotal;
-                    //receipt.AppendLine($"{item.Name} x {item.Quantity} @ ${item.Price:F2} = ${lineTotal:F2}");
-                //}
-           // }
-
-            //decimal tax = subtotal * 0.07m;
-            //decimal total = subtotal + tax;
-
-            //receipt.AppendLine("--------------------");
-            //receipt.AppendLine($"Subtotal: ${subtotal:F2}");
-            //receipt.AppendLine($"Sales Tax (7%): ${tax:F2}");
-            //receipt.AppendLine($"Total: ${total:F2}");
-            //receipt.AppendLine("====================");
-
-            //Cart.Clear(); 
-
-            //return receipt.ToString();
         }
 
     }

@@ -1,7 +1,10 @@
 using APIEcommerce.EC;
 using ecommercelibrary.DTO;
 using ecommercelibrary.models;
+using ecommercelibrary.Utilities;
+using ecommercelibrary.Utility;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using springecommerce.models;
 
 namespace APIEcommerce.Controllers
@@ -21,18 +24,32 @@ namespace APIEcommerce.Controllers
         public IEnumerable<Item?> Get()
         {
             return new InventoryEC().Get();
-            //return new List<Product>
-            //{
-            //    new Product{ Id = 1, Name = "Something 1"},
-            //    new Product{ Id = 2, Name = "Something 2"},
-            //    new Product{ Id = 3, Name = "Something 3"}
-            //};
 
         }
-        [HttpGet("/{id}")]
+        [HttpGet("{id}")]
         public Item? GetById(int id)
         {
-            return new InventoryEC().Get().FirstOrDefault(i => i.Id == id);
+            var result = new WebRequestHandler().Get($"/Inventory/{id}").Result;
+            return JsonConvert.DeserializeObject<Item>(result);
+        }
+
+        [HttpDelete("Delete/{id}")]
+        public Item? Delete(int id)
+        {
+            return new InventoryEC().Delete(id);
+        }
+
+        [HttpPost]
+        public Item? AddOrUpdate([FromBody]Item item)
+        {
+            
+            var newItem = new InventoryEC().AddOrUpdate(item); 
+            return item;
+        }
+        [HttpPost("Search")]
+        public IEnumerable<Item> Search([FromBody] QueryRequest query)
+        {
+            return new InventoryEC().Get(query.Query    ); 
         }
     }
 }

@@ -13,75 +13,92 @@ namespace MAUIecommerce.ViewModels
 {
     public class ShopViewModel : INotifyPropertyChanged
     {
-        private productserviceproxy _invSvc = productserviceproxy.Current;
-        private shoppingcartservice _cartSvc = shoppingcartservice.Current; 
-        public ItemViewModel? SelectedItem { get; set; } 
-        public ItemViewModel? SelectedCartItem { get; set; }
-        public ObservableCollection<ItemViewModel?> Inventory
-        {
-            get
-            {
-                return new ObservableCollection<ItemViewModel?>(_invSvc.Products.Where(i => i?.Quantity > 0).Select(m => new ItemViewModel(m)));
-            }
-        }
+        private readonly productserviceproxy _invSvc = productserviceproxy.Current;
+        private readonly shoppingcartservice _cartSvc = shoppingcartservice.Current;
+        private string _cartQuery = "";
 
-        public ObservableCollection<ItemViewModel?> ShoppingCart
-        {
-            get
-            {
-                return new ObservableCollection<ItemViewModel>(_cartSvc.CartItems.Where(i => i?.Quantity > 0).Select(m => new ItemViewModel(m)));
-            }
-        }
+        public ItemViewModel? SelectedItem { get; set; }
+        public ItemViewModel? SelectedCartItem { get; set; }
+
+        public ObservableCollection<ItemViewModel?> Inventory =>
+            new ObservableCollection<ItemViewModel?>(
+                _invSvc.Products.Where(i => i?.Quantity > 0)
+                .Select(m => new ItemViewModel(new Item(m)))
+            );
+
+        public ObservableCollection<ItemViewModel?> ShoppingCart =>
+            new ObservableCollection<ItemViewModel?>(
+                _cartSvc.CartItems.Where(i => i?.Quantity > 0)
+                .Select(m => new ItemViewModel(new Item(m)))
+            );
+
+        public ObservableCollection<ItemViewModel?> FilteredCart =>
+            new ObservableCollection<ItemViewModel?>(
+                _cartSvc.CartItems
+                    .Where(i => i.Quantity > 0 &&
+                                i.Product?.Name?.ToLower().Contains(_cartQuery.ToLower()) == true)
+                    .Select(i => new ItemViewModel(new Item(i)))
+            );
+
+        public string TotalDisplay =>
+            $"Total: ${_cartSvc.CartItems.Sum(i => i.Quantity * (i.Product?.Price ?? 0)):0.00}";
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
         public void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
-            if (propertyName is null)
+            if (!string.IsNullOrEmpty(propertyName))
             {
-                throw new ArgumentNullException(nameof(propertyName));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
             }
-
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         public void RefreshUX()
         {
             NotifyPropertyChanged(nameof(Inventory));
             NotifyPropertyChanged(nameof(ShoppingCart));
+            NotifyPropertyChanged(nameof(FilteredCart));
+            NotifyPropertyChanged(nameof(TotalDisplay));
         }
-        public void PurchaseItem() 
+
+        public async void PurchaseItem()
         {
             if (SelectedItem != null)
             {
-                var shouldrefresh = SelectedItem.Model.Quantity >= 1; 
-                var updateditem =_cartSvc.AddOrUpdate(SelectedItem.Model);
+                var shouldrefresh = SelectedItem.Model.Quantity >= 1;
+                var updateditem = await _cartSvc.AddOrUpdate(new Item(SelectedItem.Model));
 
                 if (updateditem != null && shouldrefresh)
                 {
-                    NotifyPropertyChanged(nameof(Inventory));
-                    NotifyPropertyChanged(nameof(ShoppingCart));
-
+                    RefreshUX();
                 }
             }
-            
         }
-        public void ReturnItem()
+
+        public async void ReturnItem()
         {
             if (SelectedCartItem != null)
             {
                 var shouldrefresh = SelectedCartItem.Model.Quantity >= 1;
-                var updateditem = _cartSvc.ReturnItem(SelectedCartItem.Model);
+                var updateditem = await _cartSvc.ReturnItem(new Item(SelectedCartItem.Model));
 
                 if (updateditem != null && shouldrefresh)
                 {
-                    NotifyPropertyChanged(nameof(Inventory));
-                    NotifyPropertyChanged(nameof(ShoppingCart));
-
+                    RefreshUX();
                 }
             }
+        }
 
+        public void FilterCart(string query)
+        {
+            _cartQuery = query ?? "";
+            NotifyPropertyChanged(nameof(FilteredCart));
+        }
+
+        public async Task CheckoutCart()
+        {
+            await _cartSvc.CheckoutAsync();
+            RefreshUX();
         }
     }
 }
-

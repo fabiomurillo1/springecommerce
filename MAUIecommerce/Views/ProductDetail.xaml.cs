@@ -7,12 +7,13 @@ namespace MAUIecommerce.Views;
 [QueryProperty(nameof(ProductId), "productId")]
 public partial class ProductDetail : ContentPage
 {
-	public ProductDetail()
-	{
-		InitializeComponent();
-	}
+    public ProductDetail()
+    {
+        InitializeComponent();
+        BindingContext = new ProductViewModel();
+    }
 
-    public int ProductId {  get; set; }
+    public int ProductId { get; set; }
 
     private void GoBackClicked(object sender, EventArgs e)
     {
@@ -22,19 +23,27 @@ public partial class ProductDetail : ContentPage
 
     private void OkClicked(object sender, EventArgs e)
     {
-        (BindingContext as ProductViewModel).AddOrUpdate(); 
+        var viewModel = (BindingContext as ProductViewModel);
+        if (viewModel != null)
+        {
+            viewModel.AddOrUpdate();
+        }
         Shell.Current.GoToAsync("//InventoryManagement");
     }
 
+
     private void ContentPage_NavigatedTo(object sender, NavigatedToEventArgs e)
     {
-        if (ProductId == 0) 
+        if (ProductId == 0)
         {
             BindingContext = new ProductViewModel();
         }
-        else  
+        else
         {
-            BindingContext = new ProductViewModel(productserviceproxy.Current.GetById(ProductId));
+            var product = productserviceproxy.Current.GetById(ProductId);
+            BindingContext = new ProductViewModel(product);
         }
+
     }
 }
+

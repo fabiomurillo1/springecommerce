@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using ecommercelibrary.models;
+using Newtonsoft.Json;
 using springecommerce.models;
 
 namespace ecommercelibrary.services
@@ -12,86 +14,111 @@ namespace ecommercelibrary.services
     {
         private productserviceproxy _prodSvc = productserviceproxy.Current;
         private List<Item> items;
-        public List<Item> CartItems
-        {
-            get
-            {
-                return items;   
-            }
+        private static shoppingcartservice? instance;
 
-        }
-        public static shoppingcartservice Current 
+        public static shoppingcartservice Current
         {
             get
             {
                 if (instance == null)
                 {
-                    instance = new shoppingcartservice();   
+                    instance = new shoppingcartservice();
                 }
                 return instance;
             }
-                
         }
 
-        private static shoppingcartservice? instance;
-        private shoppingcartservice() 
+        private shoppingcartservice()
         {
             items = new List<Item>();
         }
 
-        public Item? AddOrUpdate(Item item) 
+        public List<Item> CartItems => items;
+
+        private readonly string baseUrl = "https://localhost:7267/Cart";
+
+        public async Task<Item?> AddOrUpdate(Item item)
         {
             var existinginvitem = _prodSvc.GetById(item.Id);
             if (existinginvitem == null || existinginvitem.Quantity == 0)
             {
                 return null;
             }
-            if (existinginvitem != null)
-            {
-                existinginvitem.Quantity--;
-            }
+            existinginvitem.Quantity--;
+            _prodSvc.AddOrUpdate(existinginvitem);
 
             var existingitem = CartItems.FirstOrDefault(p => p.Id == item.Id);
-            if (existingitem == null) 
+            if (existingitem == null)
             {
-                var newItem = new Item(item);
-                newItem.Quantity = 1;
+                var newItem = new Item(item) { Quantity = 1 };
                 CartItems.Add(newItem);
-
-
+                await PostToApiAsync(newItem);
             }
-            else 
+            else
             {
                 existingitem.Quantity++;
+                await PostToApiAsync(existingitem);
             }
 
             return existinginvitem;
         }
 
-        public Item? ReturnItem(Item? item)
+        public async Task<Item?> ReturnItem(Item? item)
         {
-            if (item.Id <= 0 || item == null)
+            if (item == null || item.Id <= 0)
             {
                 return null;
             }
 
-            var itemtoreturn = CartItems.FirstOrDefault(c => c.Id == item.Id);
-            if (itemtoreturn != null)
+            var itemToReturn = CartItems.FirstOrDefault(c => c.Id == item.Id);
+            if (itemToReturn != null)
             {
-                itemtoreturn.Quantity--;
-                var inventoryitem = _prodSvc.Products.FirstOrDefault(p => p.Id == itemtoreturn.Id);
-                if(inventoryitem == null)
+                itemToReturn.Quantity--;
+
+                if (itemToReturn.Quantity <= 0)
                 {
-                    _prodSvc.AddOrUpdate(new Item(itemtoreturn));
+                    CartItems.Remove(itemToReturn);
+                    await DeleteFromApiAsync(item.Id);
                 }
                 else
                 {
-                    inventoryitem.Quantity++;
+                    await PostToApiAsync(itemToReturn);
+                }
+
+                var inventoryItem = _prodSvc.Products.FirstOrDefault(p => p.Id == itemToReturn.Id);
+                if (inventoryItem == null)
+                {
+                    _prodSvc.AddOrUpdate(new Item(itemToReturn));
+                }
+                else
+                {
+                    inventoryItem.Quantity++;
+                    _prodSvc.AddOrUpdate(inventoryItem);
                 }
             }
 
-            
-            return itemtoreturn;
+            return itemToReturn;
+        }
+
+        public async Task CheckoutAsync()
+        {
+            var client = new HttpClient();
+            await client.PostAsync(baseUrl + "/Checkout", null);
+            CartItems.Clear();
+        }
+
+        private async Task PostToApiAsync(Item item)
+        {
+            var client = new HttpClient();
+            var json = JsonConvert.SerializeObject(item);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            await client.PostAsync(baseUrl, content);
+        }
+
+        private async Task DeleteFromApiAsync(int id)
+        {
+            var client = new HttpClient();
+            await client.DeleteAsync(baseUrl + $"/{id}");
         }
     }
 }

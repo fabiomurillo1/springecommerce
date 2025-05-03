@@ -1,48 +1,62 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 using ecommercelibrary.models;
 using ecommercelibrary.services;
 using springecommerce.models;
 
 namespace MAUIecommerce.ViewModels
 {
-    public class ProductViewModel
-    {   
-        private Item? cachedModel{ get; set;}
-        public string? Name 
+    public class ProductViewModel : INotifyPropertyChanged
+    {
+        private Item? cachedModel;
+        private decimal? _price;
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        public string? Name
         {
-            get
-            {
-                return Model?.Product?.Name ?? string.Empty;
-            }
+            get => Model?.Product?.Name ?? string.Empty;
             set
             {
-                if(Model != null && Model.Product?.Name != value)
+                if (Model != null && Model.Product?.Name != value)
                 {
                     Model.Product.Name = value;
+                    OnPropertyChanged(nameof(Name));
                 }
             }
         }
-        public int? Quantity 
+
+        public decimal? Price
         {
-            get
-            {
-                return Model?.Quantity;
-            }
+            get => Model?.Product?.Price;
             set
             {
-                if(Model != null && value != null && Model.Quantity != value)
+                if (Model != null && value != Model.Product?.Price)
                 {
-                    Model.Quantity = value;
+                    Model.Product.Price = (decimal)value;
+                    OnPropertyChanged(nameof(Price));
                 }
             }
-        
+        }
+
+        public int? Quantity
+        {
+            get => Model?.Quantity;
+            set
+            {
+                if (Model != null && value != null && Model.Quantity != value)
+                {
+                    Model.Quantity = value;
+                    OnPropertyChanged(nameof(Quantity));
+                }
+            }
         }
 
         public Item? Model { get; set; }
+
+        private void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
 
         public void AddOrUpdate()
         {
@@ -53,6 +67,7 @@ namespace MAUIecommerce.ViewModels
         {
             productserviceproxy.Current.AddOrUpdate(cachedModel);
         }
+
         public ProductViewModel()
         {
             Model = new Item();
@@ -61,14 +76,19 @@ namespace MAUIecommerce.ViewModels
 
         public ProductViewModel(Item? model)
         {
-            Model = model;
-            if(model != null)
+            Model = model ?? new Item();
+            if (model != null)
             {
                 cachedModel = new Item(model);
             }
+
+            if (Model?.Product?.Id == 0)
+            {
+                Model.Product.Id = Model.Id;
+            }
         }
-
-
-
     }
 }
+
+
+
