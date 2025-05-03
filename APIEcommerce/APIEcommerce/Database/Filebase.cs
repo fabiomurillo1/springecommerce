@@ -39,10 +39,6 @@ namespace APIECommerce.Database
                 Directory.CreateDirectory(_cartRoot);
         }
 
-        // -----------------------------
-        // INVENTORY METHODS
-        // -----------------------------
-
         public List<Item?> Inventory
         {
             get
